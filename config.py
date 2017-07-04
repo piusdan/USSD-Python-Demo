@@ -16,13 +16,13 @@ class Config:
     SECRET_KEY = os.environ.get('SECRETE_KEY') or str(uuid.uuid4())
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
-    AT_APIKEY = os.environ.get('AT_APIKEY') or 'bb3c6b7bfa67657485eb14f77e0935c9dfd3559f62c0542eab165079c75ea783'
-    AT_USERNAME = os.environ.get('AT_USERNAME') or 'darklotus'
-    AT_NUMBER = os.environ.get('AT_NUMBER') or '+254711082632'
+    AT_APIKEY = os.environ.get('AT_APIKEY') or ''
+    AT_USERNAME = os.environ.get('AT_USERNAME') or ''
+    AT_NUMBER = os.environ.get('AT_NUMBER') or '+'
     SMS_CODE = os.environ.get('AT_SMSCODE') or ''
-    PRODUCT_NAME = os.environ.get('AT_PRODUCTNAME') or 'tus'
-    CELERY_BROKER_URL = "redis://localhost:6379/0"
-    CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+    PRODUCT_NAME = os.environ.get('AT_PRODUCTNAME') or ''
+    CELERY_BROKER_URL = "url to your redis instance"
+    CELERY_RESULT_BACKEND = "url to your redis instance"
     @staticmethod
     def init_app(app):
         pass
