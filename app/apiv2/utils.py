@@ -18,10 +18,11 @@ def respond(menu_text):
     return response
 
 
-def make_gateway():
+def make_gateway(api_key=None, user_name=None):
+    api_key = api_key or current_app.config["AT_APIKEY"]
+    user_name = user_name or current_app.config["AT_USERNAME"]
     return AfricasTalkingGateway(
-        current_app.config["AT_USERNAME"],
-        current_app.config["AT_APIKEY"])
+        apiKey_=api_key,username_=user_name)
 
 
 def add_session(session_id, phone_number):
