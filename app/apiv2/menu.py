@@ -1,9 +1,10 @@
 from utils import respond, update_session, make_gateway
 from .AfricasTalkingGateway import AfricasTalkingGateway, AfricasTalkingGatewayException
-from flask import current_app
+from flask import current_app, g, copy_current_request_context
 from ..models import SessionLevel, User
 from .. import db
-
+import gevent
+from .. import celery
 
 class LowerLevelMenu:
     """
@@ -59,7 +60,7 @@ class LowerLevelMenu:
         try:
 
             gateway.call(caller, to)
-        except AfricasTalkingGateway as e:
+        except AfricasTalkingGatewayException as e:
             print "Encountered an error when calling: {}".format(str(e))
 
 
@@ -173,34 +174,21 @@ class HighLevelMenu:
 
     def c2b_checkout(self):
         # Alert user of incoming Mpesa checkout
-        menu_text = "END We have sent the MPESA checkout...\n"
+        menu_text = "END We are sending you the MPESA checkout in a moment...\n"
         menu_text += "If you dont have a bonga pin, dial \n"
         menu_text += "Dial dial *126*5*1# to create.\n"
-
-        # Declare params
         gateway = make_gateway()
-
         product_name = current_app.config["PRODUCT_NAME"]
-
         currency_code = "KES"
         amount = int(self.user_response)
         metadata = {"sacco": "Nerds", "productId": "321"}
+        api_key = current_app.config["AT_APIKEY"]
+        user_name = current_app.config["AT_USERNAME"]
+        payload = {"phone_number": self.phone_number, "product_name":product_name, "metadat":metadata, "amount":amount,"currency_code": currency_code, "metadata":metadata, "api_key":api_key, "user_name":user_name}
+        async_checkoutc2b.apply_async(args=[payload], countdown=10)
 
-        # pass to gateway
-        try:
-            menu_text += "transactionId is: %s" % \
-                         gateway.initiateMobilePaymentCheckout(
-                             product_name,
-                             self.phone_number,
-                             currency_code,
-                             amount,
-                             metadata)
-
-        except AfricasTalkingGatewayException as e:
-            print "Received error response: {}".format(str(e))
-
-        # Print the response onto the page so that our gateway can read it
         return respond(menu_text)
+
 
     def default_mpesa_checkout(self):
         menu_text = "END Apologies, something went wrong... \n"
@@ -444,3 +432,14 @@ class RegistrationMenu:
 
         # Print the response onto the page so that our gateway can read it
         return respond(menu_text)
+
+@celery.task(bind=True, default_retry_delay=30 * 60)
+def async_checkoutc2b(self, payload):
+    gateway = make_gateway(api_key=payload.get("api_key"), user_name=payload.get("user_name"))
+    # pass to gateway
+    try:
+        transaction_id = gateway.initiateMobilePaymentCheckout(productName_=payload["product_name"], amount_=payload["amount"], metadata_=payload["metadata"],
+                                          phoneNumber_=payload['phone_number'], currencyCode_=payload["currency_code"])
+        print "Transaction id is: " + transaction_id
+    except Exception as exc:
+        raise self.retry(exc=exc, countdown=5)

@@ -18,11 +18,11 @@ class Config:
 
     AT_APIKEY = os.environ.get('AT_APIKEY') or ''
     AT_USERNAME = os.environ.get('AT_USERNAME') or ''
-    AT_NUMBER = os.environ.get('AT_NUMBER') or ''
+    AT_NUMBER = os.environ.get('AT_NUMBER') or '+'
     SMS_CODE = os.environ.get('AT_SMSCODE') or ''
     PRODUCT_NAME = os.environ.get('AT_PRODUCTNAME') or ''
-
-
+    CELERY_BROKER_URL = "url to your redis instance"
+    CELERY_RESULT_BACKEND = "url to your redis instance"
     @staticmethod
     def init_app(app):
         pass
@@ -49,4 +49,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'default': DevelopmentConfig
+
 }

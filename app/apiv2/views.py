@@ -1,5 +1,5 @@
 
-from flask import request, url_for, send_from_directory
+from flask import request, url_for, send_from_directory, g
 from ..models import User, SessionLevel
 from .utils import respond, add_session
 from . import api_v11
@@ -14,7 +14,6 @@ def index():
 
 
 @api_v11.route('/ussd/callback', methods=['POST'])
-
 def ussd_callback():
     """
     Handles post call back from AT
@@ -279,4 +278,3 @@ def voice_menu():
 @api_v11.route('/media/<path:path>')
 def media(path):
     return send_from_directory('media', path)
-
