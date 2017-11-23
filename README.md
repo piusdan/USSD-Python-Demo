@@ -1,3 +1,5 @@
+[![DUB](https://img.shields.io/dub/l/vibe-d.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/nine.svg)]()
 
 # Setting Up a USSD Service for MicroFinance Institutions
 #### A step-by-step guide
