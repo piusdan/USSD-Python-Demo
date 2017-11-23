@@ -1,4 +1,4 @@
-from flask import make_response
+from flask import make_response, current_app
 from app.redis import redis
 import json
 
@@ -30,7 +30,7 @@ class Menu(object):
 
     def home(self):
         """serves the home menu"""
-        menu_text = "Hello {}, welcome to Best Life Mobile Wallet,\n Choose a service\n".format(self.user.username)
+        menu_text = "Hello {}, welcome to {},\n Choose a service\n".format(self.user.username, current_app.config['APP_NAME'])
         menu_text += " 1. Deposit Money\n"
         menu_text += " 2. Withdraw Money\n"
         menu_text += " 3. Buy Airtime\n"

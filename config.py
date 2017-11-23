@@ -30,8 +30,9 @@ class Config:
     CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', "redis://localhost:6379/0")
     REDIS_URL = os.environ.get('REDIS_URL', "redis://localhost:6379/0")
     AT_USERNAME = os.environ.get('AT_USERNAME') or 'sandbox'
-    AT_APIKEY = os.environ.get('AT_APIKEY') or 'a2d657d8fc96024a22bd35a58ca87ad8db30a5edf14a136c6e1d5cd67c0dfa65'
+    AT_APIKEY = os.environ.get('AT_APIKEY')
     AT_ENVIRONMENT = os.environ.get('AT_ENVIRONMENT') or 'sandbox'
+    APP_NAME = os.environ.get('APP_NAME')
 
     @classmethod
     def init_app(cls, app):
