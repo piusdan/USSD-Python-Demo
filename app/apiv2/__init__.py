@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-api_v11 = Blueprint('api_v11', __name__)
+api_v2 = Blueprint('api_v2', __name__)
 
-from . import views
+from . import views, decorators

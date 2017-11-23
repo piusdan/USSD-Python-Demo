@@ -1,31 +1,36 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
-from celery import Celery
+from app.AfricasTalkingGateway import africastalkinggateway
+from app.database import db
+from app.celery_cfg import celery
+from config import config
+from app.login_manager import login_manager
+from app.redis import redis
 
-from config import config, Config
+version__ = '0.2.0'
 
-
-db = SQLAlchemy()
-
-celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+__title__ = 'USSDAirtime-Client-Backend'
+__package_name__ = 'ussdairtimeclient-app'
+__author__ = 'npiusdan@gmail.com'
+__description__ = 'USSD Airtime Client'
+__email__ = 'npiusdan@gmail.com'
+__copyright__ = 'Copyright 2017 Pius Dan Nyongesa'
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
+    login_manager.init_app(app)
+    redis.init_app(app)
 
     db.init_app(app)
 
     celery.conf.update(app.config)
+    africastalkinggateway.init_app(app=app)
 
     # register blueprints
-
-    from apiv1 import api_v1 as api10_blueprint
-    app.register_blueprint(api10_blueprint, url_prefix='/api/v1.0')
-
-    from apiv2 import api_v11 as api11_blueprint
-    app.register_blueprint(api11_blueprint, url_prefix='/api/v1.1')
+    from app.apiv2 import api_v2 as apiv2_blueprint
+    app.register_blueprint(apiv2_blueprint)
 
 
     return app
