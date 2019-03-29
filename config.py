@@ -14,19 +14,25 @@ class Config:
     TESTING = False
     SECRET_KEY = b"I\xf9\x9cF\x1e\x04\xe6\xfaF\x8f\xe6)-\xa432"
     CSRF_ENABLED = True
-    ADMIN_PHONENUMBER = os.environ.get('ADMIN_PHONENUMBER')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    ADMIN_PHONENUMBER = os.getenv('ADMIN_PHONENUMBER')
+    CELERY_BROKER_URL = os.getenv('REDIS_URL')
+    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL')
+    REDIS_URL = os.getenv('REDIS_URL')
+    AT_USERNAME = os.getenv('AT_USERNAME')
+    AT_APIKEY = os.getenv('AT_APIKEY')
+    SQLALCHEMY_DATABASE_URI = "postgresql://{db_user}:{db_password}@{db_host}:5432/{db_name}".format(
+        db_user=os.getenv("DB_USER", "nerdy"),
+        db_name=os.getenv("DB_NAME", "nerds_micorfinance"),
+        db_password=os.getenv("DB_PASSWORD", "n3rdy"),
+        db_host=os.getenv("DB_HOST", "localhost")
+    )
+    AT_ENVIRONMENT = os.getenv('AT_ENVIRONMENT')
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SSL_DISABLE = True
     CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
-    CELERY_BROKER_URL = os.environ.get('REDIS_URL', "redis://localhost:6379/0")
-    CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', "redis://localhost:6379/0")
-    REDIS_URL = os.environ.get('REDIS_URL', "redis://localhost:6379/0")
-    AT_USERNAME = os.environ.get('AT_USERNAME') or 'sandbox'
-    AT_APIKEY = os.environ.get('AT_APIKEY')
-    AT_ENVIRONMENT = os.environ.get('AT_ENVIRONMENT') or 'sandbox'
-    APP_NAME = os.environ.get('APP_NAME')
+    APP_NAME = 'nerds-microfinance-app'
 
     @classmethod
     def init_app(cls, app):
