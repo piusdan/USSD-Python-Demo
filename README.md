@@ -31,9 +31,9 @@ Be sure to substitute the example variables with your credentials
 
 - To install using docker, run
 
-        $ docker-compose up -b 8000:8000
+        $ docker-compose up -b 8080:8000
 
-    This will start your application on port 8000
+    This will start your application on port 8080
 
 #### Using a virtual environment
 
