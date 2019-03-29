@@ -1,11 +1,12 @@
-#usr/bin/python
+# usr/bin/python
 """
 Configuration for the USSD application
 """
-import os
 import logging
+import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))  # base directory
+
 
 class Config:
     """General configuration variables"""
@@ -73,11 +74,13 @@ class TestingConfig(Config):
     """
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+                              'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+
 
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
     'default': DevelopmentConfig
+
 }

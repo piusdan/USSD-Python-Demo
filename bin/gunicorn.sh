@@ -10,6 +10,7 @@ PORT=8000
 echo "Starting $NAME"
 
 # update db
+export FLASK_APP=manage.py
 flask initdb
 
 exec gunicorn manage:app -b $HOST:$PORT \
