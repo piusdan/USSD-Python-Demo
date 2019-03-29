@@ -1,4 +1,5 @@
 AfricastalkingGateway==1.9
+psycopg2=2.7.7
 celery==4.1.0
 Flask==0.12.2
 Flask-Bootstrap==3.3.7.1
@@ -8,6 +9,6 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-SSLify==0.1.5
 gunicorn==19.7.1
-raven==6.3.0
 blinker==1.4
 Flask_Redis==0.3.0
+python-dotenv
