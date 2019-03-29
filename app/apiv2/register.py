@@ -5,7 +5,7 @@ class RegistrationMenu(Menu):
     """Serves registration callbacks"""
     def get_number(self):
         # insert user's phone number
-        self.session.promote(21)
+        self.session["level"] = 21
         menu_text = "Please choose a  username"
         return self.ussd_proceed(menu_text)
 
@@ -13,7 +13,7 @@ class RegistrationMenu(Menu):
         username = self.user_response
         if username or not User.by_username(username): # check if user entered an option or username exists
             self.user = User.create(username=username, phone_number=self.phone_number)
-            self.session.demote(0)
+            self.session["level"] = 0
             # go to home
             return self.home()
         else: # Request again for name - level has not changed...
@@ -21,7 +21,7 @@ class RegistrationMenu(Menu):
             return self.ussd_proceed(menu_text)
 
     def execute(self):
-        if self.session.level == 0:
+        if self.session["level"] == 0:
             return self.get_number()
         else:
             return self.get_username()
