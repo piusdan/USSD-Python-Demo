@@ -1,0 +1,51 @@
+# NOTE: This docker-compose.yml is meant to be just an example of how
+# you could accomplish this on your own. It is not intended to work in
+# all use-cases and must be adapted to fit your needs. This is merely
+# a guideline.
+
+# instructions
+
+version: '3.4'
+
+x-defaults: &defaults
+  restart: unless-stopped
+  image: darklotus/nerds-microfinance:latest
+  build: .
+  depends_on:
+    - redis
+    - postgres
+  env_file: .env
+  environment:
+    FLASK_ENVIRONMENT: production
+    ADMIN_PHONENUMBER: +254XXXXXXXX
+    DB_HOST: postgres
+    DB_USER: apps
+    DB_PASSWORD: apps_pass
+    DB_NAME: nerds_microfinance
+    REDIS_URL: redis://redis:6379/0
+    AT_USERNAME: sandbox
+    AT_ENVIRONMENT: sandbox
+
+services:
+  redis:
+    restart: unless-stopped
+    image: redis:3.2-alpine
+
+  postgres:
+    restart: unless-stopped
+    image: postgres:11
+    environment:
+      POSTGRES_USER: apps
+      POSTGRES_PASSWORD: apps_pass
+      POSTGRES_DB: nerds_microfinance
+    volumes:
+      - ${PWD}/nerds-postgres:/var/lib/postgresql/data
+
+  web:
+    <<: *defaults
+    ports:
+      - '8080:8000'
+
+  worker:
+    <<: *defaults
+    command: ["./worker_start.sh"]

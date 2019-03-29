@@ -1,3 +1,5 @@
+[![DUB](https://img.shields.io/dub/l/vibe-d.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/nine.svg)]()
 
 # Setting Up a USSD Service for MicroFinance Institutions
 #### A step-by-step guide
@@ -13,66 +15,51 @@
 | Repay loan                                   |   
 | Buy Airtime                                  |  
 
-## Prerequisites
+----
 
-# INSTALLATION AND GUIDE
+## INSTALLATION AND GUIDE
 
 1. clone/download the project into the directory of your choice
 
-- First, in the config.py file in your root directory and fill in your Africa's Talking API credentials as below.
-    
-    AT_APIKEY = [your api key]
-    AT_USERNAME = [your username]
-    AT_NUMBER = [to test calls, enter a live number]
-    SMS_CODE = [your sms code]
-    PRODUCT_NAME = [your product name]
+1. Create a .env file on your root directory 
 
-# requirements
+        $ cp .env_example .env
 
-    Python version 2.* 
-    AfricastalkingGateway==1.7
-    alembic==0.9.1
-    click==6.7
-    dominate==2.3.1
-    Flask==0.12
-    Flask-Bootstrap==3.3.7.1
-    Flask-Migrate==2.0.3
-    Flask-Script==2.0.5
-    Flask-SQLAlchemy==2.2
-    Flask-SSLify==0.1.5
-    itsdangerous==0.24
-    Jinja2==2.9.5
-    Mako==1.0.6
-    MarkupSafe==1.0
-    migrate==0.3.8
-    python-editor==1.0.3
-    requests==2.13.0
-    SQLAlchemy==1.1.6
-    visitor==0.1.3
-    Werkzeug==0.12.1
+Be sure to substitute the example variables with your credentials
 
--> The project is currently not compatible with future python version
+#### Docker
 
--> Recommendend running the project in a virtual environment
+- To install using docker, run
+
+        $ docker-compose up -b 8080:8000
+
+    This will start your application on port 8080
+
+#### Using a virtual environment
+
+1. Create a virtual environment
+
+          $ python3 -m venv venv
+          $ . venv/bin/activate
+
+1. Install the project's dependancies
+
+        $ pip install requirements.txt           
 
 
-2. Create a virtual environment
+1. Configure your flask path
 
-          $ makevirtualenv microfinance            # creates a virtual environment
-          $ source microfinace/bin/activate        # start the virtual environment
+        $ export FLASK_APP=manage.py
 
-3. Install the project's requirements 
+1. Initialise your database
 
-          $ pip install requirements.txt           # download and install project's dependancies
+        $ flask initdb
 
-4. Initialise your database
+1. Launch application
 
-        $ python manage.py runserver             # starts project
+        $ flask run            
 
-5. Run your server
-
-          $ python manage.py runserver             # starts project
-          # This command starts your server on https://localhost:5000
+1. Head to https://localhost:5000
 
 - You need to set up on the sandbox and [create](https://sandbox.africastalking.com/ussd/createchannel) a USSD channel that you will use to test by dialing into it via our [simulator](https://simulator.africastalking.com:1517/).
 
