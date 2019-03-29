@@ -49,6 +49,3 @@ services:
   worker:
     <<: *defaults
     command: ["./worker_start.sh"]
-
-volumes:
-    loanbee-postgres:

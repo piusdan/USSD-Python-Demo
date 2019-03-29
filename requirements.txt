@@ -1,5 +1,5 @@
 AfricastalkingGateway==1.9
-psycopg2=2.7.7
+psycopg2==2.7.7
 celery==4.1.0
 Flask==0.12.2
 Flask-Bootstrap==3.3.7.1
