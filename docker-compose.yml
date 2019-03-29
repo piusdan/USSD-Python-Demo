@@ -44,7 +44,7 @@ services:
   web:
     <<: *defaults
     ports:
-      - '8080:8000'
+      - '0.0.0.0:8000:8000'
 
   worker:
     <<: *defaults
