@@ -9,12 +9,10 @@ from app.redis import redis
 
 version__ = '0.2.0'
 
-__title__ = 'USSDAirtime-Client-Backend'
-__package_name__ = 'ussdairtimeclient-app'
 __author__ = 'npiusdan@gmail.com'
 __description__ = 'USSD Airtime Client'
 __email__ = 'npiusdan@gmail.com'
-__copyright__ = 'Copyright 2017 Pius Dan Nyongesa'
+__copyright__ = 'Copyright 2019 Pius Dan Nyongesa'
 
 def create_app(config_name):
     app = Flask(__name__)
