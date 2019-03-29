@@ -8,9 +8,9 @@ from sqlalchemy import ForeignKey
 
 
 class Permission:
-    COMMENT = 0x02
-    POST = 0x04
-    MODERATE_POSTS = 0x08
+    READ = 0x02
+    WRITE = 0x04
+    UPDATE = 0x08
     ADMINISTER = 0x80
 
 
@@ -25,11 +25,8 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permission.COMMENT |
-                     Permission.POST, True),
-            'Moderator': (Permission.COMMENT |
-                          Permission.POST |
-                          Permission.MODERATE_POSTS, False),
+            'User': (Permission.READ |
+                     Permission.WRITE, True),
             'Administrator': (0xff, False)
         }
         for r in roles:
