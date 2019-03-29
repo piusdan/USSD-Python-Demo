@@ -102,7 +102,7 @@ class User(CRUDMixin, UserMixin, db.Model):
 class SessionLevel(CRUDMixin, db.Model):
     __tablename__ = 'session_levels'
     id = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.Text(128), unique=True)
+    session_id = db.Column(db.String(128), unique=True)
     phone_number = db.Column(db.String(25))
     response = db.Column(db.String(3))
     level = db.Column(db.Integer, default=0)
