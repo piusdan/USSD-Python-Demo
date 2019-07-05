@@ -1,5 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_redis import FlaskRedis
+
+redis = FlaskRedis()
+
 
 class CRUDMixin(object):
     def __repr__(self):

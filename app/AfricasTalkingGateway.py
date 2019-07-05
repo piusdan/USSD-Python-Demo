@@ -8,7 +8,7 @@ class GatewayException(AfricasTalkingGatewayException):
     pass
 
 
-class ussdAfricasTalkingGateway(AfricasTalkingGateway):
+class NerdsMicrofinanceGateway(AfricasTalkingGateway):
     def __init__(self):
         logging.info("Initialising Africastalking gateway")
 
@@ -29,4 +29,4 @@ class ussdAfricasTalkingGateway(AfricasTalkingGateway):
         else:
             self.Debug = False
 
-africastalkinggateway = ussdAfricasTalkingGateway()
+gateway = NerdsMicrofinanceGateway()
