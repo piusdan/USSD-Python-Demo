@@ -1,22 +1,22 @@
 from flask import g, make_response
 
-from app.apiv2.airtime import Airtime
-from app.apiv2.home import LowerLevelMenu
-from app.apiv2.register import RegistrationMenu
-from app.apiv2.withdraw import WithDrawal
-from app.apiv2.deposit import Deposit
+from airtime import Airtime
+from home import LowerLevelMenu
+from register import RegistrationMenu
+from withdraw import WithDrawal
+from deposit import Deposit
 from app.models import AnonymousUser
-from . import api_v2
+from . import ussd
 
 
-@api_v2.route('/', methods=['POST', 'GET'])
+@ussd.route('/', methods=['POST', 'GET'])
 def index():
     response = make_response("END connection ok")
     response.headers['Content-Type'] = "text/plain"
     return response
 
 
-@api_v2.route('/ussd/callback', methods=['POST'])
+@ussd.route('/ussd/callback', methods=['POST'])
 def ussd_callback():
     """Handles post call back from AT"""
     session_id = g.session_id

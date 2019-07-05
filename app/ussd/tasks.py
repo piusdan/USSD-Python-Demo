@@ -1,9 +1,9 @@
 from africastalking.AfricasTalkingGateway import AfricasTalkingGatewayException
 from flask import current_app
-from app.AfricasTalkingGateway import africastalkinggateway
-from app.apiv2.utils import kenya_time, iso_format
-from app.celery_cfg import celery
-from app.celery_cfg import celery_logger
+from app.AfricasTalkingGateway import gateway as africastalkinggateway
+from utils import kenya_time, iso_format
+from app import celery
+from app import celery_logger
 from app.models import User
 import uuid
 

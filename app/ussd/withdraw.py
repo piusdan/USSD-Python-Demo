@@ -1,5 +1,5 @@
-from app.apiv2.base_menu import Menu
-from app.apiv2.tasks import make_B2Crequest
+from base_menu import Menu
+from tasks import make_B2Crequest
 
 
 class WithDrawal(Menu):

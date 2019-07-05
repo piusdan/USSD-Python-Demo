@@ -1,5 +1,5 @@
-from app.apiv2.base_menu import Menu
-from app.apiv2.tasks import check_balance
+from base_menu import Menu
+from tasks import check_balance
 
 class LowerLevelMenu(Menu):
     """serves the home menu"""

@@ -1,5 +1,5 @@
 from app.models import User
-from app.apiv2.base_menu import  Menu
+from base_menu import  Menu
 
 class RegistrationMenu(Menu):
     """Serves registration callbacks"""

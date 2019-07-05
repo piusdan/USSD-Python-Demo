@@ -5,7 +5,7 @@ import json
 
 from app.redis import redis
 from app.models import User, AnonymousUser
-from app.apiv2 import api_v2
+from . import ussd
 
 
 def validate_ussd_user(func):
@@ -34,12 +34,11 @@ def validate_ussd_user(func):
         g.current_user = user
         g.phone_number = phone_number
         g.session_id = session_id
-        logging.info("level {}".format(g.session.get('level')))
         return func(*args, **kwargs)
     return wrapper
 
 
-@api_v2.before_app_request
+@ussd.before_app_request
 @validate_ussd_user
 def before_request():
-    logging.info("Loading current user")
+    pass

@@ -1,5 +1,5 @@
-from app.apiv2.base_menu import Menu
-from app.apiv2.tasks import makeC2Brequest
+from base_menu import Menu
+from tasks import makeC2Brequest
 
 
 class Deposit(Menu):

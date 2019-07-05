@@ -6,9 +6,8 @@ from flask import Flask
 dotenv_path = os.path.join(os.path.join(os.path.dirname(__file__), ".."), ".env")
 load_dotenv(dotenv_path)
 
-from app.AfricasTalkingGateway import gateway
-from app.database import db
-from app.database import redis
+from AfricasTalkingGateway import gateway
+from database import db, redis
 from config import config
 from celery import Celery
 
@@ -25,9 +24,9 @@ from flask_login import LoginManager
 version__ = "0.2.0"
 
 __author__ = "npiusdan@gmail.com"
-__description__ = "USSD Airtime Client"
+__description__ = "Nerds Microfinance application"
 __email__ = "npiusdan@gmail.com"
-__copyright__ = "Copyright 2019 Pius Dan Nyongesa"
+__copyright__ = "MIT LICENCE"
 
 
 login_manager = LoginManager()

@@ -1,6 +1,6 @@
-from app.apiv2 import api_v2
-from app.apiv2.base_menu import Menu
-from app.apiv2.tasks import buyAirtime
+from . import ussd
+from base_menu import Menu
+from tasks import buyAirtime
 
 
 class Airtime(Menu):
