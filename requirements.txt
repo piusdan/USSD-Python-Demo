@@ -1,7 +1,7 @@
 AfricastalkingGateway==1.9
 psycopg2==2.7.7
 celery==4.1.0
-Flask==0.12.2
+Flask==0.12.3
 Flask-Bootstrap==3.3.7.1
 Flask-Login==0.4.0
 Flask-Migrate==2.1.1
