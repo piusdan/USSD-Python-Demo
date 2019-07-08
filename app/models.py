@@ -1,5 +1,5 @@
 from app.database import db, AuditColumns
-
+from app.ussd.utils import kenya_time
 
 class User(AuditColumns, db.Model):
     __tablename__ = 'users'
@@ -7,6 +7,9 @@ class User(AuditColumns, db.Model):
     username = db.Column(db.String(64), index=True)
     phone_number = db.Column(db.String(64), unique=True, index=True, nullable=False)
     account = db.Column(db.Float, default=10.00)
+    reg_date = db.Column(db.DateTime, default=kenya_time)
+    validation = db.Column(db.String, default="")
+    city = db.Column(db.String(32), default="")
 
     def __repr__(self):
         return "User {}".format(self.name)
