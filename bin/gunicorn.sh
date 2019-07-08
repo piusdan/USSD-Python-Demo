@@ -3,7 +3,7 @@
 LOGLEVEL=info
 NAME=nerds-microfinance-app
 NUM_WORKERS=3
-HOST=127.0.0.1
+HOST=0.0.0.0
 TIMEOUT=120
 PORT=8000
 
