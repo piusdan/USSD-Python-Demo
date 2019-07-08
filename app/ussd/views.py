@@ -131,3 +131,45 @@ def voice_menu():
         isActive = request.get('isActive')
         currencyCode = request.get('currencyCode')
         status = request.get('status')
+
+
+@ussd.route('/voice/callback', methods=['POST'])
+def voice_callback():
+    """
+    voice_callback from AT's gateway is handled here
+
+    """
+    sessionId = request.get('sessionId')
+    isActive = request.get('isActive')
+
+    if isActive == "1":
+        callerNumber = request.get('callerNumber')
+        # GET values from the AT's POST request
+        session_id = request.values.get("sessionId", None)
+        isActive = request.values.get('isActive')
+        serviceCode = request.values.get("serviceCode", None)
+        text = request.values.get("text", "default")
+        text_array = text.split("*")
+        user_response = text_array[len(text_array) - 1]
+
+        # Compose the response
+        menu_text = '<?xml version="1.0" encoding="UTF-8"?>'
+        menu_text += '<Response>'
+        menu_text += '<GetDigits timeout="30" finishOnKey="#" callbackUrl="https://49af2317.ngrok.io/api/v1.1/voice/callback">'
+        menu_text += '<Say>"Thank you for calling. Press 0 to talk to sales, 1 to talk to support or 2 to hear this message again."</Say>'
+        menu_text += '</GetDigits>'
+        menu_text += '<Say>"Thank you for calling. Good bye!"</Say>'
+        menu_text += '</Response>'
+
+        # Print the response onto the page so that our gateway can read it
+        return respond(menu_text)
+
+    else:
+        # Read in call details (duration, cost). This flag is set once the call is completed.
+        # Note that the gateway does not expect a response in thie case
+
+        duration = request.get('durationInSeconds')
+        currencyCode = request.get('currencyCode')
+        amount = request.get('amount')
+
+        # You can then store this information in the database for your records
