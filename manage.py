@@ -2,11 +2,12 @@
 """Main application script"""
 
 import os
+
 import click
-from app import create_app, db
-from app.models import User, Role
 from flask_migrate import Migrate
 
+from app import create_app, db
+from app.models import User
 
 app = create_app(os.getenv('APP_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -22,7 +23,8 @@ if os.environ.get('APP_COVERAGE'):
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role)
+    return dict(app=app, db=db, User=User)
+
 
 @app.cli.command()
 def initdb():
@@ -31,22 +33,6 @@ def initdb():
     from flask_migrate import upgrade
     # migrate database to latest revision
     upgrade()
-
-@app.cli.command()
-def deploy():
-    """ Run deployment tasks."""
-    from flask_migrate import upgrade
-    from app.models import Role
-    # migrate database to latest revision
-    upgrade()
-    # create user roles
-    click.echo("Inserting roles\n-----")
-    Role.insert_roles()
-    click.echo("Done!")
-    click.echo("Inserting roles for users\n------")
-    User.insert_user_roles()
-    click.echo("Done!")
-    click.echo("Ran deployment tasks")
 
 
 @app.cli.command()
