@@ -2,7 +2,6 @@
 """
 Configuration for the USSD application
 """
-import logging
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))  # base directory
@@ -16,7 +15,7 @@ class Config:
     TESTING = False
 
     # security credentials
-    SECRET_KEY = b"I\xf9\x9cF\x1e\x04\xe6\xfaF\x8f\xe6)-\xa432" # use a secure key
+    SECRET_KEY = b"I\xf9\x9cF\x1e\x04\xe6\xfaF\x8f\xe6)-\xa432"  # use a secure key
     CSRF_ENABLED = True
 
     # persistance layer configs - configure database, redis and celery backend
@@ -33,7 +32,6 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SSL_DISABLE = True
     CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
-
 
     # africastalking credentials
     AT_ENVIRONMENT = os.getenv('AT_ENVIRONMENT')
