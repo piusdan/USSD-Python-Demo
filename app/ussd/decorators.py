@@ -1,11 +1,11 @@
-from functools import wraps
-import logging
-from flask import g, request
 import json
+from functools import wraps
 
-from app.redis import redis
+from flask import g, request
+
+from app import redis
 from app.models import User, AnonymousUser
-from app.apiv2 import api_v2
+from . import ussd
 
 
 def validate_ussd_user(func):
@@ -24,7 +24,7 @@ def validate_ussd_user(func):
         # get session
         session = redis.get(session_id)
         if session is None:
-            session = {"level":0,"session_id":session_id}
+            session = {"level": 0, "session_id": session_id}
             redis.set(session_id, json.dumps(session))
         else:
             session = json.loads(session.decode())
@@ -34,12 +34,12 @@ def validate_ussd_user(func):
         g.current_user = user
         g.phone_number = phone_number
         g.session_id = session_id
-        logging.info("level {}".format(g.session.get('level')))
         return func(*args, **kwargs)
+
     return wrapper
 
 
-@api_v2.before_app_request
+@ussd.before_app_request
 @validate_ussd_user
 def before_request():
-    logging.info("Loading current user")
+    pass

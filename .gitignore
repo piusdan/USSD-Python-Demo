@@ -106,3 +106,4 @@ ENV/
 data-dev.sqlite
 data-test.sqlite
 /.env/
+.vscode/settings.json

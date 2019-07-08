@@ -1,9 +1,12 @@
-from flask import make_response, current_app
-from app.redis import redis
 import json
 
+from flask import make_response, current_app
+
+from app.database import redis
+
+
 class Menu(object):
-    def __init__(self,session_id, session, user, user_response, phone_number=None, level=None):
+    def __init__(self, session_id, session, user, user_response, phone_number=None, level=None):
         self.session = session
         self.session_id = session_id
         self.user = user
@@ -30,7 +33,8 @@ class Menu(object):
 
     def home(self):
         """serves the home menu"""
-        menu_text = "Hello {}, welcome to {},\n Choose a service\n".format(self.user.username, current_app.config['APP_NAME'])
+        menu_text = "Hello {}, welcome to {},\n Choose a service\n".format(self.user.username,
+                                                                           current_app.config['APP_NAME'])
         menu_text += " 1. Deposit Money\n"
         menu_text += " 2. Withdraw Money\n"
         menu_text += " 3. Buy Airtime\n"
@@ -38,4 +42,3 @@ class Menu(object):
         self.session['level'] = 1
         # print the response on to the page so that our gateway can read it
         return self.ussd_proceed(menu_text)
-

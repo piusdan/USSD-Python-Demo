@@ -1,6 +1,5 @@
-from app.apiv2 import api_v2
-from app.apiv2.base_menu import Menu
-from app.apiv2.tasks import buyAirtime
+from .base_menu import Menu
+from .tasks import buyAirtime
 
 
 class Airtime(Menu):
@@ -40,8 +39,9 @@ class Airtime(Menu):
     def confirm(self):  # 13
         if self.user_response == "1":
             menu_text = "Please wait as we load your account."
-            buyAirtime.apply_async(kwargs={'phone_number': self.session['phone_number'], 'amount': self.session['amount'],
-                                           'account_phoneNumber': self.user.phone_number})
+            buyAirtime.apply_async(
+                kwargs={'phone_number': self.session['phone_number'], 'amount': self.session['amount'],
+                        'account_phoneNumber': self.user.phone_number})
             return self.ussd_end(menu_text)
         if self.user_response == "2":
             menu_text = "Thank you for doing business with us"

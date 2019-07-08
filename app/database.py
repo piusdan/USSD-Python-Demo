@@ -1,4 +1,10 @@
+from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
+
+from app.ussd.utils import kenya_time
+
+redis = FlaskRedis()
+db = SQLAlchemy()
 
 
 class CRUDMixin(object):
@@ -22,4 +28,10 @@ class CRUDMixin(object):
         db.session.commit()
         return self
 
-db = SQLAlchemy()
+
+class AuditColumns(CRUDMixin):
+    created_by = db.Column(db.String(128), nullable=True)
+    created_date = db.Column(db.DateTime, default=kenya_time)
+    last_edited_date = db.Column(db.DateTime, onupdate=kenya_time, default=kenya_time)
+    last_edited_by = db.Column(db.String(128), nullable=True)
+    active = db.Column(db.Boolean, default=False)

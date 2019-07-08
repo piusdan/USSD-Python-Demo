@@ -1,43 +1,64 @@
+import logging
+import logging.config
 import os
 
+from celery import Celery
+from celery.utils.log import get_task_logger
 from dotenv import load_dotenv
 from flask import Flask
+from flask_login import LoginManager
+
+from config import Config, config
+from .AfricasTalkingGateway import gateway
+from .database import db, redis
 
 dotenv_path = os.path.join(os.path.join(os.path.dirname(__file__), ".."), ".env")
 load_dotenv(dotenv_path)
 
-from app.AfricasTalkingGateway import africastalkinggateway
-from app.database import db
-from app.celery_cfg import celery
-from config import config
-from app.login_manager import login_manager
-from app.redis import redis
-
-version__ = "0.2.0"
-
+__version__ = "0.2.0"
 __author__ = "npiusdan@gmail.com"
-__description__ = "USSD Airtime Client"
+__description__ = "Nerds Microfinance application"
 __email__ = "npiusdan@gmail.com"
-__copyright__ = "Copyright 2019 Pius Dan Nyongesa"
+__copyright__ = "MIT LICENCE"
+
+login_manager = LoginManager()
+
+celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+celery_logger = get_task_logger(__name__)
 
 
 def create_app(config_name):
     app = Flask(__name__)
+    # configure application
     app.config.from_object(config[config_name])
-    print(app.config["REDIS_URL"])
-
     config[config_name].init_app(app)
-    login_manager.init_app(app)
-    redis.init_app(app)
 
+    # setup login manager
+    login_manager.init_app(app)
+
+    # setup database
+    redis.init_app(app)
     db.init_app(app)
 
+    # setup celery
     celery.conf.update(app.config)
-    africastalkinggateway.init_app(app=app)
+
+    # initialize africastalking gateway
+    gateway.init_app(app=app)
 
     # register blueprints
-    from app.apiv2 import api_v2 as apiv2_blueprint
+    from app.ussd import ussd as ussd_bp
 
-    app.register_blueprint(apiv2_blueprint)
+    app.register_blueprint(ussd_bp)
 
+    # setup logging
+    from app.util import setup_logging
+    from config import basedir
+
+    if app.debug:
+        logging_level = logging.DEBUG
+    else:
+        logging_level = logging.INFO
+    path = os.path.abspath(basedir, "app_logger.yaml")
+    setup_logging(default_level=logging_level, logger_file_path=path)
     return app
