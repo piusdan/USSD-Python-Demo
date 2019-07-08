@@ -1,12 +1,12 @@
 from flask import g, make_response
 
-from airtime import Airtime
-from home import LowerLevelMenu
-from register import RegistrationMenu
-from withdraw import WithDrawal
-from deposit import Deposit
 from app.models import AnonymousUser
 from . import ussd
+from .airtime import Airtime
+from .deposit import Deposit
+from .home import LowerLevelMenu
+from .register import RegistrationMenu
+from .withdraw import WithDrawal
 
 
 @ussd.route('/', methods=['POST', 'GET'])
@@ -37,7 +37,7 @@ def ussd_callback():
 
     if level >= 50:
         menu = Deposit(session_id=session_id, session=session, phone_number=g.phone_number,
-                          user_response=user_response, user=user, level=level)
+                       user_response=user_response, user=user, level=level)
         return menu.execute()
 
     if level >= 40:

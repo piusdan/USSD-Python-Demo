@@ -1,5 +1,5 @@
-from base_menu import Menu
-from tasks import makeC2Brequest
+from .base_menu import Menu
+from .tasks import makeC2Brequest
 
 
 class Deposit(Menu):

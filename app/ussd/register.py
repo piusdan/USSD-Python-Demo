@@ -1,8 +1,10 @@
 from app.models import User
-from base_menu import  Menu
+from .base_menu import Menu
+
 
 class RegistrationMenu(Menu):
     """Serves registration callbacks"""
+
     def get_number(self):
         # insert user's phone number
         self.session["level"] = 21
@@ -11,12 +13,12 @@ class RegistrationMenu(Menu):
 
     def get_username(self):
         username = self.user_response
-        if username or not User.by_username(username): # check if user entered an option or username exists
+        if username or not User.by_username(username):  # check if user entered an option or username exists
             self.user = User.create(username=username, phone_number=self.phone_number)
             self.session["level"] = 0
             # go to home
             return self.home()
-        else: # Request again for name - level has not changed...
+        else:  # Request again for name - level has not changed...
             menu_text = "Username is already in use. Please enter your username \n"
             return self.ussd_proceed(menu_text)
 
