@@ -19,15 +19,10 @@ class Config:
     CSRF_ENABLED = True
 
     # persistance layer configs - configure database, redis and celery backend
-    CELERY_BROKER_URL = os.getenv('REDIS_URL')
-    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL')
-    REDIS_URL = os.getenv('REDIS_URL')
-    SQLALCHEMY_DATABASE_URI = "postgresql://{db_user}:{db_password}@{db_host}:5432/{db_name}".format(
-        db_user=os.getenv("DB_USER", "nerdy"),
-        db_name=os.getenv("DB_NAME", "nerds_micorfinance"),
-        db_password=os.getenv("DB_PASSWORD", "n3rdy"),
-        db_host=os.getenv("DB_HOST", "localhost")
-    )
+    CELERY_BROKER_URL = os.getenv('REDIS_URL', "redis://localhost:6379")
+    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', "redis://localhost:6379")
+    REDIS_URL = os.getenv('REDIS_URL', "redis://localhost:6379")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL") or 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SSL_DISABLE = True
