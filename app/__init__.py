@@ -59,6 +59,6 @@ def create_app(config_name):
         logging_level = logging.DEBUG
     else:
         logging_level = logging.INFO
-    path = os.path.abspath(basedir, "app_logger.yaml")
+    path = os.path.join(basedir, "app_logger.yaml")
     setup_logging(default_level=logging_level, logger_file_path=path)
     return app

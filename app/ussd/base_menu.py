@@ -2,7 +2,7 @@ import json
 
 from flask import make_response, current_app
 
-from app.database import redis
+from ..database import redis
 
 
 class Menu(object):
@@ -15,7 +15,7 @@ class Menu(object):
         self.level = level
 
     def execute(self):
-        pass
+        raise NotImplementedError
 
     def ussd_proceed(self, menu_text):
         redis.set(self.session_id, json.dumps(self.session))

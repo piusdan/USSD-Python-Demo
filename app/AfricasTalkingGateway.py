@@ -8,7 +8,6 @@ class NerdsMicrofinanceGatewayGatewayException(AfricasTalkingGatewayException):
 
 
 class NerdsMicrofinanceGateway(AfricasTalkingGateway):
-
     def __init__(self):
         pass  # override default constructor
 

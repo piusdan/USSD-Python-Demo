@@ -25,7 +25,6 @@ class WithDrawal(Menu):
         if self.user_response == "2":
             menu_text = "Thank you for doing business with us"
             return self.ussd_end(menu_text)
-
         return self.home()
 
     def execute(self):

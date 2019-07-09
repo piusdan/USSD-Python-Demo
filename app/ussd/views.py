@@ -1,6 +1,5 @@
 from flask import g, make_response, request, url_for
 
-from app.models import AnonymousUser
 from . import ussd
 from .airtime import Airtime
 from .deposit import Deposit
@@ -8,6 +7,7 @@ from .home import LowerLevelMenu
 from .register import RegistrationMenu
 from .utils import respond
 from .withdraw import WithDrawal
+from ..models import AnonymousUser
 
 
 @ussd.route('/', methods=['POST', 'GET'])

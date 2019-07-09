@@ -1,13 +1,14 @@
 import uuid
 
-from africastalking.AfricasTalkingGateway import AfricasTalkingGatewayException
 from flask import current_app
 
-from app import celery
-from app import celery_logger
-from app.AfricasTalkingGateway import gateway as africastalkinggateway
-from app.models import User
-from .utils import kenya_time, iso_format
+from .utils import iso_format
+from .. import celery
+from .. import celery_logger
+from ..AfricasTalkingGateway import NerdsMicrofinanceGatewayGatewayException as AfricasTalkingGatewayException
+from ..AfricasTalkingGateway import gateway as africastalkinggateway
+from ..models import User
+from ..util import kenya_time
 
 
 @celery.task(ignore_result=True)
@@ -34,13 +35,11 @@ def check_balance(user_id):
 @celery.task(bind=True, ignore_result=True)
 def buyAirtime(self, phone_number, amount, account_phoneNumber):
     """
-    :param self:
     :param phone_number: phone number to purchase airtime for
     :param amount: airtime worth
     :param account_phoneNumber: phone number linked to account making transaction
     :return:
     """
-
     user = User.by_phoneNumber(account_phoneNumber)
     celery_logger.warn("{}".format(amount))
     if not isinstance(amount, int):
@@ -67,11 +66,16 @@ def buyAirtime(self, phone_number, amount, account_phoneNumber):
             celery_logger.error("Airtime wasn't sent to {}".format(phone_number))
     except AfricasTalkingGatewayException as exc:
         celery_logger.error("Encountered an error while sending airtime: {}".format(exc))
-    return True
 
 
 @celery.task(bind=True, ignore_result=True)
 def make_B2Crequest(self, phone_number, amount, reason):
+    """
+    :param phone_number:
+    :param amount:
+    :param reason:
+    :return:
+    """
     user = User.by_phoneNumber(phone_number)
     value = iso_format(amount)
     recipients = [
@@ -92,7 +96,6 @@ def make_B2Crequest(self, phone_number, amount, reason):
                                                                          )
         africastalkinggateway.sendMessage(to_=user.phone_number, message_=message)
         celery_logger.error(message)
-        return False
     try:
         response = africastalkinggateway.mobilePaymentB2CRequest(productName_=current_app.config["PRODUCT_NAME"],
                                                                  recipients_=recipients)[0]
@@ -140,6 +143,14 @@ def makeC2Brequest(self, phone_number, amount):
         )
         user.account += amount
         user.save()
-        celery_logger.warn("New transaction id: {} logged".format(transaction_id))
+        celery_logger.warn(
+            "New transaction id: {} logged".format(
+                transaction_id
+            )
+        )
     except AfricasTalkingGatewayException as exc:
-        celery_logger.error("Could not complete transaction {exc}".format(exc=exc))
+        celery_logger.error(
+            "Could not complete transaction {exc}".format(
+                exc=exc
+            )
+        )

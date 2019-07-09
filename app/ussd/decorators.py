@@ -3,9 +3,9 @@ from functools import wraps
 
 from flask import g, request
 
-from app import redis
-from app.models import User, AnonymousUser
 from . import ussd
+from .. import redis
+from ..models import User, AnonymousUser
 
 
 def validate_ussd_user(func):

@@ -1,5 +1,5 @@
-from app.models import User
 from .base_menu import Menu
+from ..models import User
 
 
 class RegistrationMenu(Menu):

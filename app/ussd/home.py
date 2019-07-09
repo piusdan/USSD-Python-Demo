@@ -4,7 +4,6 @@ from .tasks import check_balance
 
 class LowerLevelMenu(Menu):
     """serves the home menu"""
-
     def deposit(self):  # 1
         menu_text = "Enter amount you wish to deposit?\n"
         self.session['level'] = 50

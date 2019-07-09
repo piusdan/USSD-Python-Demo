@@ -1,7 +1,7 @@
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 
-from app.ussd.utils import kenya_time
+from .util import kenya_time
 
 redis = FlaskRedis()
 db = SQLAlchemy()
