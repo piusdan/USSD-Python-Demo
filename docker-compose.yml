@@ -14,17 +14,18 @@ x-defaults: &defaults
   depends_on:
     - redis
     - postgres
+  command: ["gunicorn.sh"]
   env_file: .env
   environment:
-    FLASK_ENVIRONMENT: production
-    ADMIN_PHONENUMBER: +254XXXXXXXX
-    DB_HOST: postgres
-    DB_USER: apps
-    DB_PASSWORD: apps_pass
-    DB_NAME: nerds_microfinance
-    REDIS_URL: redis://redis:6379/0
-    AT_USERNAME: sandbox
-    AT_ENVIRONMENT: sandbox
+    FLASK_DEBUG: 1 # set this to 0 to disable debug mode
+    FLASK_APP: manage.py
+  volumes:
+    - ./app:/opt/apps/app
+    - ./migrations:/opt/apps/migrations
+    - ./config.py:/opt/apps/config.py
+    - ./celery_worker.py:/opt/apps/celery_worker.py
+    - ./bin/gunicorn.sh:/opt/apps/gunicorn.sh
+    - ./bin/worker_start.sh:/opt/apps/worker_start.sh
 
 services:
   redis:
@@ -38,8 +39,6 @@ services:
       POSTGRES_USER: apps
       POSTGRES_PASSWORD: apps_pass
       POSTGRES_DB: nerds_microfinance
-    volumes:
-      - ${PWD}/nerds-postgres:/var/lib/postgresql/data
 
   web:
     <<: *defaults
@@ -48,4 +47,4 @@ services:
 
   worker:
     <<: *defaults
-    command: ["./worker_start.sh"]
+    command: ["worker_start.sh"]

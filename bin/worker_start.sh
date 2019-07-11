@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
+source appenv/bin/activate
 
-celery worker -A app.worker.celery --loglevel=INFO
+appenv/bin/celery worker -A app.worker.celery --loglevel=INFO
