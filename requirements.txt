@@ -13,3 +13,4 @@ blinker==1.4
 Flask_Redis==0.3.0
 python-dotenv
 pyaml
+watchdog

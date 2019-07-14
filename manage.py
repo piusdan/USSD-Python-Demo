@@ -12,6 +12,7 @@ from app.models import User
 app = create_app(os.getenv('APP_CONFIG') or 'default')
 migrate = Migrate(app, db)
 
+
 # set up code coverage
 COV = None
 if os.environ.get('APP_COVERAGE'):

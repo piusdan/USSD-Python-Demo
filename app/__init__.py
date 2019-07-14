@@ -2,13 +2,12 @@ import logging
 import logging.config
 import os
 
-from celery import Celery
 from celery.utils.log import get_task_logger
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 
-from config import Config, config
+from config import config, Config
 from .AfricasTalkingGateway import gateway
 from .database import db, redis
 
@@ -23,8 +22,21 @@ __copyright__ = "MIT LICENCE"
 
 login_manager = LoginManager()
 
-celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
 celery_logger = get_task_logger(__name__)
+
+
+def create_celery():
+    from celery import Celery
+
+    celery = Celery(
+        __name__,
+        backend=Config.CELERY_RESULT_BACKEND,
+        broker=Config.CELERY_BROKER_URL
+    )
+    return celery
+
+
+celery = create_celery()
 
 
 def create_app(config_name):
@@ -40,11 +52,12 @@ def create_app(config_name):
     redis.init_app(app)
     db.init_app(app)
 
-    # setup celery
-    celery.conf.update(app.config)
 
     # initialize africastalking gateway
     gateway.init_app(app=app)
+
+    # setup celery
+    celery.conf.update(app.config)
 
     # register blueprints
     from app.ussd import ussd as ussd_bp

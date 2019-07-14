@@ -14,18 +14,13 @@ x-defaults: &defaults
   depends_on:
     - redis
     - postgres
-  command: ["gunicorn.sh"]
+  command: ["start_app.sh"]
   env_file: .env
   environment:
     FLASK_DEBUG: 1 # set this to 0 to disable debug mode
     FLASK_APP: manage.py
   volumes:
-    - ./app:/opt/apps/app
-    - ./migrations:/opt/apps/migrations
-    - ./config.py:/opt/apps/config.py
-    - ./celery_worker.py:/opt/apps/celery_worker.py
-    - ./bin/gunicorn.sh:/opt/apps/gunicorn.sh
-    - ./bin/worker_start.sh:/opt/apps/worker_start.sh
+    - .:/opt/apps/app
 
 services:
   redis:
@@ -47,4 +42,4 @@ services:
 
   worker:
     <<: *defaults
-    command: ["worker_start.sh"]
+    command: ["start_worker.sh"]
