@@ -1,5 +1,6 @@
 import json
 from functools import wraps
+import uuid
 
 from flask import g, request
 
@@ -18,7 +19,7 @@ def validate_ussd_user(func):
         # get phone number
         phone_number = request.values.get("phoneNumber")
         # get session id
-        session_id = request.values.get("sessionId")
+        session_id = request.values.get("sessionId") or str(uuid.uuid4())
         # get user
         user = User.by_phoneNumber(phone_number) or AnonymousUser()
         # get session

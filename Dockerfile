@@ -1,16 +1,40 @@
-FROM ubuntu:18.04
+FROM python:3.6-jessie as base
+
+# prepare
 RUN apt-get update && \
-    apt-get install -qyy \
-    -o APT::Install-Recommends=false -o APT::Install-Suggests=false \
-    python3-venv python3-dev build-essential \
-    python3-pip libpq-dev python-psycopg2 && \
-    cd /usr/local/bin && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-WORKDIR /opt/apps
+    apt-get install -y software-properties-common && \
+    apt-get install -y curl && \
+    apt-get install -y unzip && \
+    apt-get install -y build-essential && \
+    apt-get install -y libfreetype6-dev && \
+    apt-get install -y libhdf5-serial-dev && \
+    apt-get install -y libpng-dev && \
+    apt-get install -y libzmq3-dev && \
+    apt-get install -y pkg-config
+
+
+# Build
+FROM base as builder
+
+RUN pip install virtualenv
+
+RUN virtualenv -p python3 /appenv
+
+WORKDIR /var/src/
+
+COPY requirements.txt .
+
+RUN . /appenv/bin/activate; pip install -r requirements.txt
+
+# run
+FROM base
+
+COPY --from=builder /appenv /appenv
+
+WORKDIR /var/src/
+
 COPY . .
-RUN python3 -m venv appenv
-RUN appenv/bin/pip install -r requirements.txt
-RUN . ./appenv/bin/activate
+
 ENTRYPOINT [ "sh" ]
-CMD [ "./start_app.sh" ]
+
+EXPOSE 8000

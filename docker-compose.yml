@@ -15,10 +15,16 @@ x-defaults: &defaults
     - redis
     - postgres
   command: ["start_app.sh"]
-  env_file: .env
   environment:
     FLASK_DEBUG: 1 # set this to 0 to disable debug mode
     FLASK_APP: manage.py
+    FLASK_ENVIRONMENT : production
+    ADMIN_PHONENUMBER : +254703554404
+    DATABASE_URL : postgresql://apps:apps_apps@postgres/nerds_microfinance
+    REDIS_URL : redis://redis:6379/0
+    AT_USERNAME : awesome_nerd
+    AT_APIKEY : some_api_key
+    AT_ENVIRONMENT : sandbox
   volumes:
     - .:/opt/apps/app
 

@@ -52,12 +52,18 @@ def create_app(config_name):
     redis.init_app(app)
     db.init_app(app)
 
-
     # initialize africastalking gateway
     gateway.init_app(app=app)
 
     # setup celery
     celery.conf.update(app.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
 
     # register blueprints
     from app.ussd import ussd as ussd_bp
