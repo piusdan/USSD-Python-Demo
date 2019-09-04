@@ -1,19 +1,147 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
+
 # Add steps that build, run tests, deploy, and more:
+
 # https://aka.ms/yaml
 
+
+
 trigger:
+
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+variables:
+
+  imageName: ussd-demo
+
+  vmImageName: "ubuntu-latest"
+
+  dockerfilePath: "**/Dockerfile"
+
+  dockerRegistryServiceConnection: workPrawnACR
+
+  k8sNamespace: ussd-demo
+
+  acrRegistryName: workprawnacr.azurecr.io
+
+  revisionID: $(Build.BuildId)
+
+  azureResourceGroup: phoenix
+
+  kubernetesCluster: phoenix-k8s
+
+  azureSubscriptionEndpoint: workPrawnARM
+
+  kubernetesServiceEndpoint: ""
+
+
+
+
+
+stages:
+
+- stage: Build
+
+  displayName: Build and push stage
+
+  jobs:  
+
+  - job: Build
+
+    displayName: Build job
+
+    pool:
+
+      vmImage: $(vmImageName)
+
+    steps:
+
+    - task: Docker@2
+
+      displayName: Login to ACR
+
+      inputs:
+
+        command: login
+
+        containerRegistry: $(dockerRegistryServiceConnection)
+
+    - task: Docker@2
+
+      displayName: Build and push an image to container registry
+
+      inputs:
+
+        command: buildAndPush
+
+        repository: $(imageName)
+
+        dockerfile: $(dockerfilePath)
+
+        containerRegistry: $(dockerRegistryServiceConnection)
+
+        tags: |
+
+          $(Build.BuildId)
+
+          latest
+
+    - task: Docker@2
+
+      displayName: Logout from ACR 
+
+      inputs:
+
+        command: logout
+
+        containerRegistry: $(dockerRegistryServiceConnection)
+
+
+
+- stage: Deploy
+
+  displayName: Deploy
+
+  jobs:
+
+  - deployment: production
+
+    displayName: Deploy to production
+
+    pool:
+
+      vmImage: $(vmImageName)
+
+    environment: prod
+
+    strategy:
+
+      runOnce:
+
+        deploy:
+
+          steps:
+
+            - task: Kubernetes@1
+
+              displayName: Deploy web
+
+              inputs:
+
+                connectionType: Azure Resource Manager
+
+                azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+
+                azureResourceGroup: $(azureResourceGroup)
+
+                kubernetesCluster: $(kubernetesCluster)
+
+                namespace: $(k8sNamespace)
+
+                command: set
+
+                arguments: image deployment/ussd-demo ussd-demo=$(acrRegistryName)/$(imageName):$(revisionID)         
