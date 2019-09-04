@@ -1,5 +1,6 @@
 [![DUB](https://img.shields.io/dub/l/vibe-d.svg)]()
 [![PyPI](https://img.shields.io/pypi/v/nine.svg)]()
+[![Build Status](https://dev.azure.com/dannyongesa/ussd%20python%20demo/_apis/build/status/Piusdan.USSD-Python-Demo?branchName=master)](https://dev.azure.com/dannyongesa/ussd%20python%20demo/_build/latest?definitionId=2&branchName=master)
 
 # Setting Up a USSD Service for MicroFinance Institutions
 #### A step-by-step guide
