@@ -12,26 +12,6 @@ handlers:
         formatter: simple
         stream: ext://sys.stdout
 
-    info_file_handler:
-        class: logging.handlers.TimedRotatingFileHandler
-        level: INFO
-        formatter: simple
-        filename: logs/web_app.info.log
-        when : D
-        interval : 1
-        backupCount: 20
-        encoding: utf8
-
-    error_file_handler:
-        class: logging.handlers.TimedRotatingFileHandler
-        level: ERROR
-        formatter: simple
-        filename: logs/web_app.err.log
-        when : D
-        interval : 1
-        backupCount: 20
-        encoding: utf8
-
 root:
     level: INFO
     handlers: [console]
