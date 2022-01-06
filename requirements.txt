@@ -1,6 +1,6 @@
 AfricastalkingGateway==1.9
 blinker==1.4
-celery==4.3.0
+celery==5.2.2
 Flask==1.1.1
 Flask-Migrate==2.5.2
 Flask-Redis==0.3.0
